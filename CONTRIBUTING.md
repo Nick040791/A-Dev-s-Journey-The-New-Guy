@@ -1,6 +1,6 @@
 # Contributing to "The New Guy"
 
-First off, thank you for considering contributing to **Software Engineer: The New Guy**! This is an open-source educational game aimed at making learning full-stack development engaging, stressful (in a fun way), and highly interactive. 
+First off, thank you for considering contributing to **A Dev's Journey: The New Guy**! This is an open-source educational game aimed at making learning full-stack development engaging, stressful (in a fun way), and highly interactive. 
 
 Because we are blending game design, web development, and local AI models, there is a lot of ground to cover. We welcome developers, designers, and educators of all skill levels.
 
