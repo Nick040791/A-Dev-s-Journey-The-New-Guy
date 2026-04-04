@@ -1,63 +1,116 @@
-import { MessageSquare } from 'lucide-react';
+import { Lock, MessageSquare } from 'lucide-react';
 
 import { useModuleRegistry } from '@/app/providers/module-registry-context';
-import { PanelFrame } from '@/shared/ui/PanelFrame';
-import { StatusBadge } from '@/shared/ui/StatusBadge';
+import { teamRoster } from '@/mocks/shell-data';
+import type { CharacterAccent } from '@/shared/types/module-contracts';
+import { cx } from '@/shared/lib/cx';
+
+function msgBorderClass(speaker: string): string {
+  const member = teamRoster.find((m) => m.name === speaker);
+  return member ? `msg-border-${member.accent}` : '';
+}
+
+function speakerSprite(speaker: string): { col: number; accent: CharacterAccent } | null {
+  const member = teamRoster.find((m) => m.name === speaker);
+  if (!member) return null;
+  return { col: (member as { spriteCol?: number }).spriteCol ?? 0, accent: member.accent };
+}
 
 export function ChatPanel() {
   const { conversationEngine } = useModuleRegistry();
-  const status = conversationEngine.getStatus();
   const snapshot = conversationEngine.getConversationSnapshot();
 
   return (
-    <PanelFrame
-      eyebrow="TEAM CHAT"
-      title="Squad Feed"
-      subtitle="Mocked messages, future conversation seams"
-      actions={<StatusBadge tone="info">{status.state}</StatusBadge>}
-      contentClassName="chat-panel-content flex min-h-0 flex-col"
-    >
-      <div className="chat-roster-list">
-        {snapshot.roster.map((member) => (
-          <article className="roster-card chat-roster-card" key={member.name}>
-            <div className="roster-avatar">{member.name.split(' ').map((part) => part[0]).join('')}</div>
-            <div className="min-w-0 flex-1">
-              <div className="chat-roster-header">
-                <p className="truncate text-sm font-semibold text-(--text-primary)">{member.name}</p>
-                <StatusBadge tone={member.status === 'online' ? 'ok' : member.status === 'syncing' ? 'info' : 'muted'}>
-                  {member.status}
-                </StatusBadge>
-              </div>
-              <p className="text-[0.72rem] uppercase tracking-[0.2em] text-(--text-dim)">{member.role}</p>
-              <p className="chat-roster-focus text-sm text-(--text-muted)">{member.focus}</p>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <div className="min-h-0 flex-1 overflow-y-auto pr-1 shell-scroll">
-        <div className="chat-message-list">
-          {snapshot.messages.map((message) => (
-            <article className="message-card chat-message-card" key={message.id}>
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-sm font-semibold text-(--text-primary)">{message.speaker}</p>
-                  <p className="text-[0.68rem] uppercase tracking-[0.22em] text-(--text-dim)">{message.role}</p>
-                </div>
-                <StatusBadge tone={message.tone === 'warning' ? 'warn' : message.tone === 'support' ? 'ok' : 'info'}>
-                  {message.timestamp}
-                </StatusBadge>
-              </div>
-              <p className="chat-message-body text-sm text-(--text-muted)">{message.body}</p>
-            </article>
-          ))}
+    <div className="flex h-full min-h-0 flex-col bg-(--surface-1) border-l border-(--panel-border)">
+      <div className="panel-header">
+        <div className="min-w-0">
+          <span className="panel-eyebrow">TEAM CHAT</span>
+          <div className="panel-heading-row">
+            <h2 className="font-body text-[15px] font-semibold text-(--text-primary)">Squad Feed</h2>
+          </div>
         </div>
       </div>
 
-      <div className="chat-compose chat-compose-shell">
-        <MessageSquare className="h-4 w-4 text-(--text-dim)" />
-        <span className="truncate text-sm text-(--text-dim)">{snapshot.inputPlaceholder}</span>
+      {/* Roster strip */}
+      <div className="chat-roster-list">
+        {snapshot.roster.map((member) => {
+          const accent = (member as { accent?: CharacterAccent }).accent ?? 'lime';
+          const spriteCol = (member as { spriteCol?: number }).spriteCol;
+          const initials = (member as { initials?: string }).initials ?? member.name.split(' ').map((p) => p[0]).join('');
+          const isUrgent = member.status === 'urgent';
+
+          return (
+            <article
+              className={cx('roster-card chat-roster-card', isUrgent && 'emergency-border')}
+              key={member.name}
+            >
+              <div className={cx('roster-avatar', `avatar-ring-${accent}`)}>
+                {spriteCol != null ? (
+                  <div className={`avatar-portrait avatar-col-${spriteCol}`} />
+                ) : (
+                  <div className={cx('roster-avatar', `avatar-${accent}`)}>{initials}</div>
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="chat-roster-header">
+                  <p className="truncate font-body text-[15px] font-semibold text-(--text-primary)">{member.name}</p>
+                  <span className={cx(
+                    'shell-chip text-[12px]',
+                    member.status === 'online' && 'text-(--success)',
+                    member.status === 'urgent' && 'text-(--danger)',
+                    member.status === 'watching' && 'text-(--warning)',
+                    member.status === 'ready' && 'text-(--accent)',
+                    member.status === 'committing' && 'text-(--accent-violet)',
+                  )}>
+                    {member.status}
+                  </span>
+                </div>
+                <p className="text-[12px] font-body uppercase tracking-[0.16em] text-(--text-dim)">{member.role}</p>
+                <p className="chat-roster-focus font-body text-[14px] text-(--text-muted)">{member.focus}</p>
+              </div>
+            </article>
+          );
+        })}
       </div>
-    </PanelFrame>
+
+      {/* Message list */}
+      <div className="min-h-0 flex-1 overflow-y-auto shell-scroll">
+        <div className="chat-message-list">
+          {snapshot.messages.map((message) => {
+            const sprite = speakerSprite(message.speaker);
+            return (
+              <article
+                className={cx('message-card chat-message-card', msgBorderClass(message.speaker))}
+                key={message.id}
+              >
+                <div className="flex items-start gap-2">
+                  {sprite && (
+                    <div className={cx('roster-avatar flex-shrink-0', `avatar-ring-${sprite.accent}`)}>
+                      <div className={`avatar-portrait avatar-col-${sprite.col}`} />
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <div>
+                        <p className="font-body text-[15px] font-semibold text-(--text-primary)">{message.speaker}</p>
+                        <p className="font-body text-[12px] uppercase tracking-[0.16em] text-(--text-dim)">{message.role}</p>
+                      </div>
+                      <span className="font-body text-[13px] text-(--text-dim)">{message.timestamp}</span>
+                    </div>
+                    <p className="chat-message-body font-chat text-[14px] text-(--text-muted)">{message.body}</p>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Compose (locked until Module 02) */}
+      <div className="chat-compose" style={{ opacity: 0.5, cursor: 'not-allowed' }}>
+        <Lock className="h-3 w-3 flex-shrink-0 text-(--text-dim)" />
+        <span className="truncate font-body text-[14px] text-(--text-dim)">Chat unlocks in Module 02</span>
+      </div>
+    </div>
   );
 }

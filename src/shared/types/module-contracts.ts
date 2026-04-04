@@ -22,11 +22,17 @@ export interface MissionSnapshot {
   notes: string[];
 }
 
+export type CharacterAccent = 'cyan' | 'pink' | 'lime' | 'violet' | 'amber';
+
 export interface TeamMemberSnapshot {
   name: string;
   role: string;
-  status: 'online' | 'syncing' | 'away';
+  status: 'online' | 'syncing' | 'away' | 'urgent' | 'watching' | 'ready' | 'committing';
   focus: string;
+  accent: CharacterAccent;
+  initials: string;
+  /** Column index (0-4) in roster.png sprite sheet */
+  spriteCol: number;
 }
 
 export interface ChatMessage {
