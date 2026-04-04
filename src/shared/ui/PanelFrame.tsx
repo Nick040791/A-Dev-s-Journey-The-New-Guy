@@ -27,9 +27,9 @@ export function PanelFrame({
       <header className="panel-header">
         <div className="min-w-0">
           <p className="panel-eyebrow">{eyebrow}</p>
-          <div className="mt-1 flex items-center gap-3">
-            <h2 className="truncate text-[1rem] font-semibold text-(--text-primary)">{title}</h2>
-            {subtitle ? <span className="truncate text-xs text-(--text-dim)">{subtitle}</span> : null}
+          <div className="panel-heading-row">
+            <h2 className="panel-heading-title text-[1rem] font-semibold text-(--text-primary)">{title}</h2>
+            {subtitle ? <span className="panel-heading-subtitle text-xs text-(--text-dim)">{subtitle}</span> : null}
           </div>
         </div>
         {actions ? <div className="shrink-0">{actions}</div> : null}

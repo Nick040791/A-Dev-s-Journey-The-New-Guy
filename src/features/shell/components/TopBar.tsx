@@ -37,16 +37,16 @@ export function TopBar({
   return (
     <header className="top-bar-shell">
       <div className="top-bar-brand">
-        <div>
+        <div className="top-bar-brand-copy">
           <p className="panel-eyebrow">Module 01 / Game Shell</p>
           <h1 className="font-display text-[1.2rem] uppercase tracking-[0.16em] text-(--text-primary)">
             Software Engineer // The New Guy
           </h1>
         </div>
-        <div className="hidden items-center gap-2 xl:flex">
-          <span className="shell-chip">{preset.tag}</span>
-          <span className="shell-chip">{platform}</span>
-          <span className="shell-chip">Electron + Vite + React</span>
+        <div className="top-bar-meta hidden xl:flex">
+          <span className="shell-chip top-bar-meta-chip">{preset.tag}</span>
+          <span className="shell-chip top-bar-meta-chip">{platform}</span>
+          <span className="shell-chip top-bar-meta-chip">Electron + Vite + React</span>
         </div>
       </div>
 

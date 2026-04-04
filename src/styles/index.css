@@ -133,10 +133,39 @@ select {
   gap: 0.75rem;
 }
 
+.top-bar-brand {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.top-bar-brand-copy {
+  min-width: 0;
+  flex: 1 1 320px;
+}
+
+.top-bar-meta {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.top-bar-meta-chip {
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
 .top-bar-nav {
   justify-content: center;
   overflow-x: auto;
   padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.top-bar-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .top-bar-actions {
@@ -181,6 +210,24 @@ select {
 
 .panel-content {
   padding-bottom: var(--panel-padding);
+}
+
+.panel-heading-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.panel-heading-title {
+  min-width: 0;
+  line-height: 1.35;
+}
+
+.panel-heading-subtitle {
+  max-width: 100%;
+  line-height: 1.35;
 }
 
 .panel-eyebrow,
@@ -237,6 +284,7 @@ select {
 .file-tab,
 .segment-button,
 .preset-card {
+  cursor: pointer;
   transition:
     border-color 160ms ease,
     background-color 160ms ease,
@@ -251,6 +299,24 @@ select {
 .preset-card:hover {
   border-color: rgb(var(--accent-rgb) / 0.42);
   background: rgb(255 255 255 / 0.06);
+}
+
+.chrome-button:focus-visible,
+.nav-pill:focus-visible,
+.file-tab:focus-visible,
+.segment-button:focus-visible,
+.preset-card:focus-visible {
+  outline: 2px solid rgb(var(--accent-rgb) / 0.6);
+  outline-offset: 2px;
+}
+
+.chrome-button:active,
+.nav-pill:active,
+.file-tab:active,
+.segment-button:active,
+.preset-card:active {
+  transform: scale(0.97);
+  transition-duration: 60ms;
 }
 
 .chrome-button {
@@ -303,6 +369,14 @@ select {
   border-radius: calc(var(--radius-panel) - 8px);
   background: var(--surface-2);
   border: 1px solid rgb(var(--accent-rgb) / 0.12);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.roster-card:hover,
+.status-card:hover,
+.signal-row:hover {
+  border-color: rgb(var(--accent-rgb) / 0.28);
+  box-shadow: 0 0 10px rgb(var(--accent-rgb) / calc(var(--glow-strength) * 0.06));
 }
 
 .roster-card,
@@ -339,6 +413,11 @@ select {
 .file-tabs {
   overflow-x: auto;
   padding-bottom: 0.85rem;
+  scrollbar-width: none;
+}
+
+.file-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .file-tab {
@@ -363,6 +442,174 @@ select {
   color: var(--text-primary);
 }
 
+.chat-panel-content {
+  gap: 0.9rem;
+}
+
+.chat-roster-list,
+.chat-message-list {
+  display: grid;
+}
+
+.chat-roster-list {
+  gap: 0.65rem;
+}
+
+.chat-message-list {
+  gap: 0.75rem;
+}
+
+.chat-roster-card {
+  align-items: flex-start;
+  padding: 0.85rem;
+}
+
+.chat-roster-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem 0.5rem;
+}
+
+.chat-roster-focus {
+  display: -webkit-box;
+  margin-top: 0.45rem;
+  line-height: 1.5;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.chat-message-card {
+  padding: 0.9rem;
+}
+
+.chat-message-body {
+  margin-top: 0.7rem;
+  line-height: 1.55;
+}
+
+.chat-compose-shell {
+  padding: 0.75rem 0.85rem;
+}
+
+.output-drawer-content {
+  display: grid;
+  min-height: 0;
+  gap: 0.85rem;
+  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+}
+
+.output-signal-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.output-signal-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.output-signal-row {
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.8rem 0.85rem;
+}
+
+.output-terminal-card {
+  padding: 0.9rem 1rem 1rem;
+}
+
+.output-terminal-uri {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mission-status-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+}
+
+.mission-panel-content {
+  gap: 0.9rem;
+}
+
+.mission-summary-card,
+.mission-mentor-card,
+.mission-seams-card {
+  padding: 1rem;
+}
+
+.mission-summary-top,
+.mission-mentor-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.65rem 0.85rem;
+}
+
+.mission-summary-copy,
+.mission-mentor-note {
+  margin-top: 0.7rem;
+  line-height: 1.65;
+}
+
+.mission-objective-list,
+.mission-note-list,
+.mission-seams-list {
+  margin-top: 0.9rem;
+}
+
+.mission-objective-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.mission-note-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.mission-seams-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.mission-seam-item {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.mission-seam-label {
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.mission-seam-copy {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.55;
+}
+
+.mission-status-card {
+  align-items: flex-start;
+}
+
+.mission-status-card > div {
+  min-width: 0;
+}
+
 .editor-shell {
   min-height: 0;
   flex: 1;
@@ -370,6 +617,31 @@ select {
   border-radius: calc(var(--radius-panel) - 10px);
   border: 1px solid rgb(var(--accent-rgb) / 0.12);
   background: #080d1a;
+}
+
+/* ── editor boot animation ─────────────────────────── */
+
+.editor-boot-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgb(var(--accent-rgb) / 0.6);
+  animation: boot-glow 1.4s ease-in-out infinite;
+}
+
+@keyframes boot-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+    box-shadow: 0 0 6px rgb(var(--accent-rgb) / 0.3);
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 18px rgb(var(--accent-rgb) / 0.7);
+    transform: scale(1.15);
+  }
 }
 
 .objective-row {
@@ -568,6 +840,27 @@ select {
     justify-content: flex-start;
     flex-wrap: wrap;
   }
+
+  .output-drawer-content {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    align-content: start;
+  }
+
+  .output-signal-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 1fr;
+  }
+
+  .output-signal-row {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .output-signal-row .status-badge {
+    margin-top: auto;
+  }
 }
 
 @media (max-width: 820px) {
@@ -587,5 +880,9 @@ select {
     bottom: 0.75rem;
     width: auto;
     max-height: 84vh;
+  }
+
+  .output-signal-list {
+    grid-template-columns: 1fr;
   }
 }

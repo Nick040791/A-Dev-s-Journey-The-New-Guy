@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useSyncExternalStore } from 'react';
 
 import { Group, Panel, useDefaultLayout, usePanelRef } from 'react-resizable-panels';
 
@@ -17,6 +17,16 @@ const WorkspacePanel = lazy(() =>
     default: module.WorkspacePanel,
   })),
 );
+
+const narrowQuery = '(max-width: 1000px)';
+const narrowMql = typeof window !== 'undefined' ? window.matchMedia(narrowQuery) : undefined;
+function subscribeNarrow(cb: () => void) {
+  narrowMql?.addEventListener('change', cb);
+  return () => narrowMql?.removeEventListener('change', cb);
+}
+function getIsNarrow() {
+  return narrowMql?.matches ?? false;
+}
 
 function WorkspacePanelFallback() {
   return (
@@ -44,23 +54,23 @@ export function ShellLayout() {
   const syncPanelState = useShellStore((state) => state.syncPanelState);
   const themePresetId = useShellStore((state) => state.themePresetId);
 
+  const isNarrow = useSyncExternalStore(subscribeNarrow, getIsNarrow, () => false);
+
   useEffect(() => {
-    if (leftPanelCollapsed) {
+    if (isNarrow || leftPanelCollapsed) {
       leftPanelRef.current?.collapse();
-      return;
+    } else {
+      leftPanelRef.current?.expand();
     }
-
-    leftPanelRef.current?.expand();
-  }, [leftPanelCollapsed, leftPanelRef]);
+  }, [isNarrow, leftPanelCollapsed, leftPanelRef]);
 
   useEffect(() => {
-    if (rightPanelCollapsed) {
+    if (isNarrow || rightPanelCollapsed) {
       rightPanelRef.current?.collapse();
-      return;
+    } else {
+      rightPanelRef.current?.expand();
     }
-
-    rightPanelRef.current?.expand();
-  }, [rightPanelCollapsed, rightPanelRef]);
+  }, [isNarrow, rightPanelCollapsed, rightPanelRef]);
 
   useEffect(() => {
     if (outputOpen) {

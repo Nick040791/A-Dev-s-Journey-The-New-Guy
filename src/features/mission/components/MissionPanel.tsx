@@ -13,6 +13,12 @@ export function MissionPanel() {
   const mentor = aiMentor.getMentorSnapshot(currentView);
   const narrative = narrativeState.getNarrativeSnapshot();
   const fx = presentationFx.getFxSnapshot();
+  const seams = [
+    { label: 'Mission engine', summary: missionEngine.getStatus().summary },
+    { label: 'AI mentor layer', summary: aiMentor.getStatus().summary },
+    { label: 'Narrative state', summary: narrativeState.getStatus().summary },
+    { label: 'Presentation FX', summary: presentationFx.getStatus().summary },
+  ];
 
   return (
     <PanelFrame
@@ -20,18 +26,18 @@ export function MissionPanel() {
       title={mission.title}
       subtitle={mission.ticketId}
       actions={<StatusBadge tone="info">{mission.priority}</StatusBadge>}
-      contentClassName="flex min-h-0 flex-col gap-4 overflow-y-auto pr-1 shell-scroll"
+      contentClassName="mission-panel-content flex min-h-0 flex-col overflow-y-auto pr-1 shell-scroll"
     >
-      <section className="mission-card">
-        <div className="flex items-start justify-between gap-3">
-          <div>
+      <section className="mission-card mission-summary-card">
+        <div className="mission-summary-top">
+          <div className="min-w-0">
             <p className="panel-eyebrow">{mission.phase}</p>
-            <p className="mt-2 text-sm leading-6 text-(--text-muted)">{mission.summary}</p>
+            <p className="mission-summary-copy text-sm text-(--text-muted)">{mission.summary}</p>
           </div>
           <StatusBadge tone="ok">shell scope</StatusBadge>
         </div>
 
-        <div className="mt-4 space-y-3">
+        <div className="mission-objective-list">
           {mission.objectives.map((objective) => (
             <div className="objective-row" key={objective.id}>
               <span className={objective.completed ? 'objective-check objective-check-done' : 'objective-check'} />
@@ -40,7 +46,7 @@ export function MissionPanel() {
           ))}
         </div>
 
-        <div className="mt-4 flex flex-wrap gap-2">
+        <div className="mission-note-list">
           {mission.notes.map((note) => (
             <span className="shell-chip" key={note}>
               {note}
@@ -49,18 +55,18 @@ export function MissionPanel() {
         </div>
       </section>
 
-      <section className="mentor-card">
+      <section className="mentor-card mission-mentor-card">
         <div className="mentor-avatar">{mentor.name.split(' ').map((part) => part[0]).join('')}</div>
         <div className="min-w-0 flex-1">
-          <div className="flex items-center justify-between gap-3">
+          <div className="mission-mentor-header">
             <div>
               <p className="text-sm font-semibold text-(--text-primary)">{mentor.name}</p>
               <p className="text-[0.72rem] uppercase tracking-[0.18em] text-(--text-dim)">{mentor.role}</p>
             </div>
             <StatusBadge tone="ok">{mentor.mood}</StatusBadge>
           </div>
-          <p className="mt-3 text-sm leading-6 text-(--text-muted)">{mentor.note}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
+          <p className="mission-mentor-note text-sm text-(--text-muted)">{mentor.note}</p>
+          <div className="mission-note-list">
             {mentor.focusAreas.map((focus) => (
               <span className="shell-chip" key={focus}>
                 {focus}
@@ -70,31 +76,39 @@ export function MissionPanel() {
         </div>
       </section>
 
-      <section className="grid gap-3 xl:grid-cols-3">
-        <article className="status-card">
+      <section className="mission-status-grid">
+        <article className="status-card mission-status-card">
           <Flag className="h-4 w-4 text-(--accent)" />
-          <p className="status-card-title">Narrative Lane</p>
-          <p className="status-card-copy">{narrative.relationshipTrend}</p>
+          <div className="min-w-0">
+            <p className="status-card-title">Narrative Lane</p>
+            <p className="status-card-copy">{narrative.relationshipTrend}</p>
+          </div>
         </article>
-        <article className="status-card">
+        <article className="status-card mission-status-card">
           <Radar className="h-4 w-4 text-(--accent-secondary)" />
-          <p className="status-card-title">Sprint Mood</p>
-          <p className="status-card-copy">{narrative.sprintMood}</p>
+          <div className="min-w-0">
+            <p className="status-card-title">Sprint Mood</p>
+            <p className="status-card-copy">{narrative.sprintMood}</p>
+          </div>
         </article>
-        <article className="status-card">
+        <article className="status-card mission-status-card">
           <Sparkles className="h-4 w-4 text-(--accent-tertiary)" />
-          <p className="status-card-title">FX Track</p>
-          <p className="status-card-copy">{fx.pulseLevel}</p>
+          <div className="min-w-0">
+            <p className="status-card-title">FX Track</p>
+            <p className="status-card-copy">{fx.pulseLevel}</p>
+          </div>
         </article>
       </section>
 
-      <section className="stacked-card">
+      <section className="stacked-card mission-seams-card">
         <p className="panel-eyebrow">Future module seams</p>
-        <ul className="mt-3 space-y-3 text-sm text-(--text-muted)">
-          <li>Mission engine: {missionEngine.getStatus().summary}</li>
-          <li>AI mentor layer: {aiMentor.getStatus().summary}</li>
-          <li>Narrative state: {narrativeState.getStatus().summary}</li>
-          <li>Presentation FX: {presentationFx.getStatus().summary}</li>
+        <ul className="mission-seams-list">
+          {seams.map((seam) => (
+            <li className="mission-seam-item" key={seam.label}>
+              <span className="mission-seam-label">{seam.label}</span>
+              <span className="mission-seam-copy">{seam.summary}</span>
+            </li>
+          ))}
         </ul>
       </section>
     </PanelFrame>

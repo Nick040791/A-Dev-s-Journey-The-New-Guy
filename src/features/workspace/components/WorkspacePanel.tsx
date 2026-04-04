@@ -13,10 +13,10 @@ const WorkspacePreviewDeck = lazy(() => import('@/features/workspace/components/
 
 function EditorLoadFallback() {
   return (
-    <div className="editor-standby flex h-full flex-col items-center justify-center gap-3 text-center">
-      <p className="panel-eyebrow">MONACO</p>
-      <p className="font-display text-sm uppercase tracking-[0.18em] text-(--text-primary)">Loading editor runtime</p>
-      <p className="max-w-md text-sm leading-6 text-(--text-muted)">Fetching the editor core, worker, and shell theme pack for the workspace bay.</p>
+    <div className="editor-standby flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
+      <div className="editor-boot-pulse" aria-hidden="true" />
+      <p className="panel-eyebrow">EDITOR</p>
+      <p className="font-display text-sm uppercase tracking-[0.18em] text-(--text-primary)">Loading runtime</p>
     </div>
   );
 }
