@@ -4,30 +4,58 @@
 
 ## 🚀 Core Features
 
-* **The Arcade IDE:** A fully functional Monaco-powered code editor wrapped in an 8-bit, dark-mode neon aesthetic.
-* **Proactive AI Teammates:** Interact with locally-hosted LLM characters (via Ollama) who act as your dev team. The Product Manager chases deadlines, the Tech Lead reviews your code, and QA aggressively hunts for your bugs.
-* **Real-World Curriculum:** Progress through actual software development sprints, moving from basic HTML/CSS hotfixes to complex backend database management and ethical AI integration.
-* **Stress Mechanics:** It’s not just a tutorial; it’s a game. Manage your time, handle interrupts from the team, and keep the application from crashing before deployment.
+* **Desktop Shell / Game Shell:** A polished Electron shell with a top bar, chat lane, Monaco workspace, mission / mentor rail, and output drawer.
+* **Retro-Neon Design Playground:** Centralized theme presets plus live controls for density, glow intensity, and accent behavior.
+* **Replaceable Module Boundaries:** Mocked adapters for mission, evaluation, conversation, mentor, narrative, and presentation systems.
+* **Persistent Shell State:** Theme, active view, panel open state, and panel layouts survive restarts for fast iteration.
 
 ## 🛠️ Tech Stack
 
 We are building this using the modern web stack to create a seamless desktop application:
-* **Framework:** Electron / React
-* **Styling:** Tailwind CSS (for that neon/CRT aesthetic)
-* **Code Editor:** Monaco Editor (the engine behind VS Code)
-* **AI Engine:** Ollama / llama.cpp (running locally to ensure privacy and low latency)
-* **State Management:** Zustand or Redux (TBD)
+* **Desktop Runtime:** Electron
+* **Frontend:** React + TypeScript + Vite
+* **Styling:** Tailwind CSS + centralized shell tokens
+* **Code Editor:** Monaco Editor
+* **State Management:** Zustand
+* **Layout System:** react-resizable-panels
 
 ## 🗺️ Roadmap: Where We Are At
 
 We are currently in **Phase 1: Foundation**. The project is highly modular. 
 
-- [ ] **Module 1: The Shell.** Building the Main Menu, Stack Selector, and 8-bit Character Creation screen. *(Current Focus)*
-- [ ] **Module 2: The Workspace.** Integrating the Monaco editor and the retro UI layout.
-- [ ] **Module 3: The Team.** Hooking up the local Ollama API to drive the persistent NPC chat window.
-- [ ] **Module 4: Sprint 1.** Creating the first playable tutorial level.
+- [x] **Module 1: The Shell.** Desktop shell, multi-panel workspace, theme presets, settings surface, and mocked module seams.
+- [ ] **Module 2: Shell Systems.** Real shell interactions: richer layout memory, mission routing, and deeper workspace affordances.
+- [ ] **Module 3: The Team.** Hook up the local conversation / mentor transport behind the existing shell adapters.
+- [ ] **Module 4: Sprint 1.** Create the first playable tutorial mission flow on top of the established shell.
 
 ## 💻 Getting Started (Local Development)
 
-*(Note: Instructions will be updated as the boilerplate is merged).*
-To run this project locally, you will need Node.js installed, as well as [Ollama](https://ollama.com/) running on your machine to power the NPC interactions.
+Module 01 does **not** require Ollama yet. Local model integration remains intentionally out of scope for this shell build.
+
+### Prerequisites
+
+* Node.js 22+
+
+### Install
+
+```bash
+npm install
+```
+
+### Run The Desktop Shell
+
+```bash
+npm run dev
+```
+
+### Build Production Assets
+
+```bash
+npm run build
+```
+
+### Lint
+
+```bash
+npm run lint
+```
