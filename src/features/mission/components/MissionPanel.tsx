@@ -1,102 +1,141 @@
-import { Flag, Radar, Sparkles } from 'lucide-react';
+import { ChevronDown, Gauge, Sparkles, User, BookOpen } from 'lucide-react';
 
 import { useModuleRegistry } from '@/app/providers/module-registry-context';
-import { useShellStore } from '@/features/shell/state/use-shell-store';
-import { PanelFrame } from '@/shared/ui/PanelFrame';
-import { StatusBadge } from '@/shared/ui/StatusBadge';
+import { cx } from '@/shared/lib/cx';
 
 export function MissionPanel() {
-  const currentView = useShellStore((state) => state.currentView);
-  const { aiMentor, missionEngine, narrativeState, presentationFx } = useModuleRegistry();
+  const { missionEngine, aiMentor, narrativeState, presentationFx } = useModuleRegistry();
 
-  const mission = missionEngine.getActiveMission(currentView);
-  const mentor = aiMentor.getMentorSnapshot(currentView);
+  const mission = missionEngine.getActiveMission('workspace');
+  const mentor = aiMentor.getMentorSnapshot('workspace');
   const narrative = narrativeState.getNarrativeSnapshot();
   const fx = presentationFx.getFxSnapshot();
 
   return (
-    <PanelFrame
-      eyebrow="MISSION / MENTOR"
-      title={mission.title}
-      subtitle={mission.ticketId}
-      actions={<StatusBadge tone="info">{mission.priority}</StatusBadge>}
-      contentClassName="flex min-h-0 flex-col gap-4 overflow-y-auto pr-1 shell-scroll"
-    >
-      <section className="mission-card">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="panel-eyebrow">{mission.phase}</p>
-            <p className="mt-2 text-sm leading-6 text-(--text-muted)">{mission.summary}</p>
+    <div className="flex h-full min-h-0 flex-col bg-(--surface-1) border-l border-(--panel-border)">
+      <div className="panel-header">
+        <div className="min-w-0">
+          <span className="panel-eyebrow">MISSION / MENTOR</span>
+          <div className="panel-heading-row">
+            <h2 className="font-body text-[15px] font-semibold text-(--text-primary)">Guidance Bay</h2>
           </div>
-          <StatusBadge tone="ok">shell scope</StatusBadge>
         </div>
+      </div>
 
-        <div className="mt-4 space-y-3">
-          {mission.objectives.map((objective) => (
-            <div className="objective-row" key={objective.id}>
-              <span className={objective.completed ? 'objective-check objective-check-done' : 'objective-check'} />
-              <span className="text-sm text-(--text-primary)">{objective.label}</span>
+      <div className="min-h-0 flex-1 overflow-y-auto shell-scroll">
+        {/* Active mission */}
+        <MissionSection mission={mission} />
+
+        {/* Mentor guidance */}
+        <section className="border-t border-(--panel-border) px-3 py-3">
+          <div className="sidebar-section-header mb-2">
+            <ChevronDown className="h-3 w-3" />
+            <User className="h-3 w-3 text-(--accent)" />
+            <span>Mentor</span>
+          </div>
+          <div className="mentor-card">
+            <div className="flex items-center justify-between gap-2">
+              <p className="font-body text-[15px] font-semibold text-(--text-primary)">{mentor.name}</p>
+              <span className="shell-chip text-[12px] text-(--accent)">{mentor.mood}</span>
+            </div>
+            <p className="font-body text-[12px] uppercase tracking-[0.16em] text-(--text-dim)">{mentor.role}</p>
+            <p className="mt-2 font-chat text-[14px] leading-relaxed text-(--text-muted)">{mentor.note}</p>
+            {mentor.focusAreas.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-1">
+                {mentor.focusAreas.map((area) => (
+                  <span key={area} className="mission-tag">{area}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Narrative state */}
+        <section className="border-t border-(--panel-border) px-3 py-3">
+          <div className="sidebar-section-header mb-2">
+            <ChevronDown className="h-3 w-3" />
+            <BookOpen className="h-3 w-3 text-(--accent)" />
+            <span>Narrative</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            <NarrativeRow label="Sprint mood" value={narrative.sprintMood} />
+            <NarrativeRow label="Relationships" value={narrative.relationshipTrend} />
+            {narrative.flags.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-1">
+                {narrative.flags.map((flag) => (
+                  <span key={flag} className="mission-tag text-(--text-dim)">{flag}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Presentation FX */}
+        <section className="border-t border-(--panel-border) px-3 py-3">
+          <div className="sidebar-section-header mb-2">
+            <ChevronDown className="h-3 w-3" />
+            <Sparkles className="h-3 w-3 text-(--accent)" />
+            <span>FX Layer</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            <NarrativeRow label="Chrome" value={fx.chromeMode} />
+            <NarrativeRow label="Pulse" value={fx.pulseLevel} />
+            <NarrativeRow label="Ambient" value={fx.ambientNote} />
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- sub-components ---------- */
+
+function MissionSection({ mission }: { mission: ReturnType<ReturnType<typeof useModuleRegistry>['missionEngine']['getActiveMission']> }) {
+  return (
+    <section className="px-3 py-3">
+      <div className="sidebar-section-header mb-2">
+        <ChevronDown className="h-3 w-3" />
+        <Gauge className="h-3 w-3 text-(--accent)" />
+        <span>Active Mission</span>
+      </div>
+      <div className="mission-readout">
+        <div className="flex items-center justify-between gap-2">
+          <span className="mission-readout-ticket">{mission.ticketId}</span>
+          <span className={cx(
+            'shell-chip text-[12px]',
+            mission.priority === 'high' ? 'text-(--danger)' : 'text-(--warning)',
+          )}>
+            {mission.priority}
+          </span>
+        </div>
+        <span className="mission-readout-title">{mission.title}</span>
+        <span className="text-[12px] uppercase tracking-[0.16em] font-body text-(--text-dim)">{mission.phase}</span>
+        <span className="mission-readout-summary">{mission.summary}</span>
+        <div className="mt-2 flex flex-col gap-1">
+          {mission.objectives.map((obj) => (
+            <div key={obj.id} className="flex items-center gap-2">
+              <span className={obj.completed ? 'objective-check objective-check-done' : 'objective-check'} />
+              <span className="font-body text-[14px] text-(--text-muted)">{obj.label}</span>
             </div>
           ))}
         </div>
-
-        <div className="mt-4 flex flex-wrap gap-2">
-          {mission.notes.map((note) => (
-            <span className="shell-chip" key={note}>
-              {note}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      <section className="mentor-card">
-        <div className="mentor-avatar">{mentor.name.split(' ').map((part) => part[0]).join('')}</div>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="text-sm font-semibold text-(--text-primary)">{mentor.name}</p>
-              <p className="text-[0.72rem] uppercase tracking-[0.18em] text-(--text-dim)">{mentor.role}</p>
-            </div>
-            <StatusBadge tone="ok">{mentor.mood}</StatusBadge>
-          </div>
-          <p className="mt-3 text-sm leading-6 text-(--text-muted)">{mentor.note}</p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {mentor.focusAreas.map((focus) => (
-              <span className="shell-chip" key={focus}>
-                {focus}
-              </span>
+        {mission.notes.length > 0 && (
+          <div className="mt-2 flex flex-col gap-1">
+            {mission.notes.map((note, i) => (
+              <p key={i} className="font-chat text-[13px] text-(--text-dim) italic">— {note}</p>
             ))}
           </div>
-        </div>
-      </section>
+        )}
+      </div>
+    </section>
+  );
+}
 
-      <section className="grid gap-3 xl:grid-cols-3">
-        <article className="status-card">
-          <Flag className="h-4 w-4 text-(--accent)" />
-          <p className="status-card-title">Narrative Lane</p>
-          <p className="status-card-copy">{narrative.relationshipTrend}</p>
-        </article>
-        <article className="status-card">
-          <Radar className="h-4 w-4 text-(--accent-secondary)" />
-          <p className="status-card-title">Sprint Mood</p>
-          <p className="status-card-copy">{narrative.sprintMood}</p>
-        </article>
-        <article className="status-card">
-          <Sparkles className="h-4 w-4 text-(--accent-tertiary)" />
-          <p className="status-card-title">FX Track</p>
-          <p className="status-card-copy">{fx.pulseLevel}</p>
-        </article>
-      </section>
-
-      <section className="stacked-card">
-        <p className="panel-eyebrow">Future module seams</p>
-        <ul className="mt-3 space-y-3 text-sm text-(--text-muted)">
-          <li>Mission engine: {missionEngine.getStatus().summary}</li>
-          <li>AI mentor layer: {aiMentor.getStatus().summary}</li>
-          <li>Narrative state: {narrativeState.getStatus().summary}</li>
-          <li>Presentation FX: {presentationFx.getStatus().summary}</li>
-        </ul>
-      </section>
-    </PanelFrame>
+function NarrativeRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="font-body text-[12px] uppercase tracking-[0.16em] text-(--text-dim)">{label}</p>
+      <p className="font-chat text-[14px] text-(--text-muted)">{value}</p>
+    </div>
   );
 }

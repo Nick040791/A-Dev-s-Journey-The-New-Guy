@@ -28,11 +28,11 @@ export function SettingsPanel() {
         <header className="flex items-start justify-between gap-4">
           <div>
             <p className="panel-eyebrow">STYLE LAB</p>
-            <h2 className="mt-2 font-display text-[1.1rem] uppercase tracking-[0.14em] text-(--text-primary)">
-              Shell tuning controls
+            <h2 className="mt-2 font-display text-[10px] uppercase tracking-[0.08em] text-(--text-primary)">
+              Shell tuning
             </h2>
-            <p className="mt-2 text-sm leading-6 text-(--text-muted)">
-              Theme, density, glow, and accent behavior are persisted locally so layout iteration survives restarts.
+            <p className="mt-2 font-body text-[15px] leading-5 text-(--text-muted)">
+              Theme, density, glow, and accent style persist locally across restarts.
             </p>
           </div>
           <button aria-label="Close settings" className="chrome-button" onClick={() => setSettingsOpen(false)} type="button">
@@ -51,10 +51,10 @@ export function SettingsPanel() {
                 type="button"
               >
                 <div>
-                  <p className="text-sm font-semibold text-(--text-primary)">{preset.label}</p>
-                  <p className="mt-1 text-[0.72rem] uppercase tracking-[0.18em] text-(--text-dim)">{preset.tag}</p>
+                  <p className="font-body text-[15px] font-semibold text-(--text-primary)">{preset.label}</p>
+                  <p className="mt-1 text-[12px] font-body uppercase tracking-[0.14em] text-(--text-dim)">{preset.tag}</p>
                 </div>
-                <p className="text-sm leading-6 text-(--text-muted)">{preset.description}</p>
+                <p className="font-body text-[14px] leading-5 text-(--text-muted)">{preset.description}</p>
               </button>
             ))}
           </div>

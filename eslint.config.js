@@ -6,10 +6,20 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'dist-electron', 'node_modules'],
+    ignores: ['dist', 'dist-electron', 'node_modules', 'public/monaco'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  {
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      globals: {
+        ...globals.node,
+      },
+      sourceType: 'module',
+    },
+  },
   {
     files: ['src/**/*.{ts,tsx}', 'electron/**/*.ts', 'vite.config.ts'],
     languageOptions: {

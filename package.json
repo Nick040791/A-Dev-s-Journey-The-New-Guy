@@ -2,7 +2,7 @@
   "name": "a-devs-journey-the-new-guy",
   "version": "0.1.0",
   "private": true,
-  "description": "Module 01 app shell for Software Engineer: The New Guy.",
+  "description": "Module 01 app shell for A Dev's Journey: The New Guy.",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
@@ -18,7 +18,10 @@
   "dependencies": {
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@fontsource/orbitron": "^5.2.8",
+    "@fontsource/press-start-2p": "^5.2.7",
+    "@fontsource/silkscreen": "^5.2.8",
     "@fontsource/space-grotesk": "^5.2.10",
+    "@fontsource/vt323": "^5.2.7",
     "@monaco-editor/react": "^4.7.0",
     "lucide-react": "^1.7.0",
     "monaco-editor": "^0.55.1",

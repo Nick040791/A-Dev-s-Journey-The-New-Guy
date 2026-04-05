@@ -45,51 +45,35 @@ function getMonacoErrorMessage(error: unknown): string {
 
 function EditorRuntimeChecking() {
   return (
-    <div className="editor-standby flex h-full flex-col justify-center gap-5 px-6 text-center">
-      <div className="space-y-3">
-        <p className="panel-eyebrow">EDITOR HEALTH CHECK</p>
-        <p className="font-display text-sm uppercase tracking-[0.18em] text-(--text-primary)">Verifying local runtime</p>
-        <p className="mx-auto max-w-lg text-sm leading-6 text-(--text-muted)">
-          Checking the local Monaco runtime under <span className="font-code text-(--text-primary)">./monaco/vs</span> before mounting the editor surface.
-        </p>
-      </div>
-
-      <div className="stacked-card mx-auto max-w-lg text-left">
-        <p className="panel-eyebrow">Expected runtime</p>
-        <p className="mt-2 text-sm font-semibold text-(--text-primary)">AMD loader + static editor assets</p>
-        <p className="mt-2 text-sm leading-6 text-(--text-muted)">
-          This check prevents the shell from failing silently if the synced Monaco assets are missing or the loader path is unavailable.
-        </p>
-      </div>
+    <div className="editor-standby flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
+      <div className="editor-boot-pulse" aria-hidden="true" />
+      <p className="panel-eyebrow">EDITOR</p>
+      <p className="font-display text-sm uppercase tracking-[0.18em] text-(--text-primary)">Verifying runtime</p>
+      <p className="font-code text-xs text-(--text-dim)">./monaco/vs</p>
     </div>
   );
 }
 
 function EditorRuntimeError({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
-    <div className="editor-standby flex h-full flex-col justify-center gap-5 px-6 text-center">
-      <div className="space-y-3">
-        <p className="panel-eyebrow">EDITOR HEALTH CHECK</p>
-        <p className="font-display text-sm uppercase tracking-[0.18em] text-(--text-primary)">Editor runtime unavailable</p>
-        <p className="mx-auto max-w-lg text-sm leading-6 text-(--text-muted)">
-          Monaco could not be loaded from the local shell runtime. The rest of the shell is still intact, but the editor surface is being held back until the runtime responds.
-        </p>
-      </div>
+    <div className="editor-standby flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
+      <AlertTriangle className="h-6 w-6 text-(--warning)" />
+      <p className="panel-eyebrow">EDITOR</p>
+      <p className="font-display text-sm uppercase tracking-[0.18em] text-(--text-primary)">Runtime unavailable</p>
+      <p className="mx-auto max-w-md text-xs leading-5 text-(--text-muted)">
+        Monaco could not be loaded. The shell is intact but the editor is held back.
+      </p>
 
-      <div className="stacked-card mx-auto flex max-w-xl flex-col gap-4 text-left">
+      <div className="stacked-card mx-auto flex max-w-md flex-col gap-3 text-left">
         <div className="flex items-start gap-3">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-(--warning)" />
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-(--text-primary)">Runtime diagnostic</p>
-            <p className="mt-2 break-words font-code text-xs leading-6 text-(--text-muted)">{message}</p>
-          </div>
+          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-(--warning)" />
+          <p className="min-w-0 wrap-break-word font-code text-xs leading-5 text-(--text-dim)">{message}</p>
         </div>
-
         <div className="flex flex-wrap items-center gap-3">
-          <span className="shell-chip">loader path: ./monaco/vs/loader.js</span>
+          <span className="shell-chip">loader: ./monaco/vs/loader.js</span>
           <button className="chrome-button chrome-button-primary" onClick={onRetry} type="button">
             <RotateCcw className="h-4 w-4" />
-            <span>Retry runtime check</span>
+            <span>Retry</span>
           </button>
         </div>
       </div>
@@ -103,16 +87,23 @@ export default function WorkspaceEditorSurface({ activeFile, onChange, themeId }
   );
   const [retryToken, setRetryToken] = useState(0);
 
-  useEffect(() => {
+  function handleRetry() {
     if (loader.__getMonacoInstance()) {
       setRuntimeStatus({ state: 'ready' });
       return;
     }
 
+    setRuntimeStatus({ state: 'checking' });
+    setRetryToken((value) => value + 1);
+  }
+
+  useEffect(() => {
+    if (loader.__getMonacoInstance()) {
+      return;
+    }
+
     let cancelled = false;
     const cancelable = loader.init();
-
-    setRuntimeStatus({ state: 'checking' });
 
     cancelable
       .then(() => {
@@ -137,7 +128,7 @@ export default function WorkspaceEditorSurface({ activeFile, onChange, themeId }
   }
 
   if (runtimeStatus.state === 'error') {
-    return <EditorRuntimeError message={runtimeStatus.message} onRetry={() => setRetryToken((value) => value + 1)} />;
+    return <EditorRuntimeError message={runtimeStatus.message} onRetry={handleRetry} />;
   }
 
   return (
