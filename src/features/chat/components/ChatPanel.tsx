@@ -21,7 +21,7 @@ export function ChatPanel() {
   const snapshot = conversationEngine.getConversationSnapshot();
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-(--surface-1) border-l border-(--panel-border)">
+    <div className="flex h-full min-h-0 flex-col bg-(--surface-1) border-r border-(--panel-border)">
       <div className="panel-header">
         <div className="min-w-0">
           <span className="panel-eyebrow">TEAM CHAT</span>

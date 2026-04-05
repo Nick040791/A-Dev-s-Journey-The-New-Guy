@@ -3,6 +3,7 @@ import { lazy, Suspense, useCallback, useState } from 'react';
 import { Group, Panel, useDefaultLayout, usePanelRef } from 'react-resizable-panels';
 
 import { ChatPanel } from '@/features/chat/components/ChatPanel';
+import { MissionPanel } from '@/features/mission/components/MissionPanel';
 import { OutputDrawer } from '@/features/output/components/OutputDrawer';
 import { ActivityBar, type ActivityView } from '@/features/shell/components/ActivityBar';
 import { ExplorerPanel } from '@/features/shell/components/ExplorerPanel';
@@ -53,6 +54,7 @@ export function ShellLayout() {
   const outputPanelRef = usePanelRef();
   const sidebarPanelRef = usePanelRef();
   const chatPanelRef = usePanelRef();
+  const missionPanelRef = usePanelRef();
   const verticalLayout = useDefaultLayout({ id: 'new-guy-vertical-layout' });
   const horizontalLayout = useDefaultLayout({ id: 'new-guy-horizontal-layout' });
 
@@ -95,7 +97,7 @@ export function ShellLayout() {
             orientation="horizontal"
           >
             {/* Sidebar */}
-            <Panel collapsedSize={0} collapsible defaultSize={20} minSize={14} panelRef={sidebarPanelRef}>
+            <Panel collapsedSize={0} collapsible defaultSize={15} minSize={12} panelRef={sidebarPanelRef}>
               {activityView === 'explorer' || activityView === 'settings' ? (
                 <ExplorerPanel
                   activeFilePath={activeFilePath}
@@ -108,8 +110,14 @@ export function ShellLayout() {
             </Panel>
             <ResizeHandle direction="horizontal" />
 
+            {/* Chat panel (left) */}
+            <Panel collapsedSize={0} collapsible defaultSize={18} minSize={14} panelRef={chatPanelRef}>
+              <ChatPanel />
+            </Panel>
+            <ResizeHandle direction="horizontal" />
+
             {/* Center: editor + output */}
-            <Panel defaultSize={55} minSize={30}>
+            <Panel defaultSize={42} minSize={25}>
               <Group
                 className="h-full min-h-0"
                 defaultLayout={verticalLayout.defaultLayout}
@@ -135,9 +143,9 @@ export function ShellLayout() {
             </Panel>
             <ResizeHandle direction="horizontal" />
 
-            {/* Chat panel (right) */}
-            <Panel collapsedSize={0} collapsible defaultSize={25} minSize={18} panelRef={chatPanelRef}>
-              <ChatPanel />
+            {/* Mission / Mentor panel (right) */}
+            <Panel collapsedSize={0} collapsible defaultSize={25} minSize={16} panelRef={missionPanelRef}>
+              <MissionPanel />
             </Panel>
           </Group>
         </main>

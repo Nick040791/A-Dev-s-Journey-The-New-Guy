@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Purpose
-This repository is building **Software Engineer: The New Guy**, a desktop-first 2D retro-neon educational coding game. The product is best treated as a **narrative dev-team simulator powered by a curriculum engine**.
+This repository is building **A Dev's Journey: The New Guy**, a desktop-first 2D retro-neon educational coding game. The product is best treated as a **narrative dev-team simulator powered by a curriculum engine**.
 
 ## Current build priority
 The current priority is **Module 01: App Shell / Game Shell**.

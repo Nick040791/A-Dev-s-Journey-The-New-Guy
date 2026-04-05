@@ -142,3 +142,6 @@ vite.config.ts.timestamp-*
 
 # Playwright MCP
 .playwright-mcp/
+
+# Electron build output
+dist-electron/

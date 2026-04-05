@@ -195,7 +195,7 @@ export default function ArcadeBootcampUIMockups() {
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-cyan-400/20 bg-[#0b0f18]/90 px-4 py-3 shadow-[0_0_30px_rgba(34,211,238,0.08)]">
           <div>
             <div className={`${scale.heroLabel} uppercase tracking-[0.22em] text-cyan-300`} style={titleFont}>Arcade IDE Emulator</div>
-            <div className={`mt-2 ${scale.heroTitle} leading-none text-white`}>Software Engineer // The New Guy</div>
+            <div className={`mt-2 ${scale.heroTitle} leading-none text-white`}>A Dev's Journey // The New Guy</div>
           </div>
           <div className="flex flex-wrap gap-2">
             <StatusPill tone="cyan">VS Code Shell</StatusPill>

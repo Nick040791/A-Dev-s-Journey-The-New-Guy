@@ -2,7 +2,7 @@
   "name": "a-devs-journey-the-new-guy",
   "version": "0.1.0",
   "private": true,
-  "description": "Module 01 app shell for Software Engineer: The New Guy.",
+  "description": "Module 01 app shell for A Dev's Journey: The New Guy.",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {

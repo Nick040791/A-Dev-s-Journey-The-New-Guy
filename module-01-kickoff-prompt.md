@@ -4,7 +4,7 @@ Use this with the custom agent selected in GitHub Copilot Chat.
 
 ---
 
-You are building **Module 01: App Shell / Game Shell** for a desktop-first 2D retro-neon educational coding game called **Software Engineer: The New Guy**.
+You are building **Module 01: App Shell / Game Shell** for a desktop-first 2D retro-neon educational coding game called **A Dev's Journey: The New Guy**.
 
 ## Product context
 This product is a **narrative dev-team simulator powered by a curriculum engine**. The player is a new developer learning through tickets, chat, coding tasks, review feedback, and mentorship.
